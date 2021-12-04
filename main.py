@@ -1,19 +1,24 @@
+import re
 
 class Token:
     def init(self, tokentype, lexeme, literal, line):
-       this.tokentype = tokentype
-       this.lexeme = lexeme
-       this.literal = literal
-       this.line = line
+       self.tokentype = tokentype
+       self.lexeme = lexeme
+       self.literal = literal
+       self.line = line
 
     # to_string function? not sure in python
 
 class Scanner:
     def init(self, source):
-        this.source = source
-        this.tokens = []
+        self.current = -1
+        self.source = source
+        self.tokens = []
 
-    def scan_tokens():
+    def split_into_lexemes(self):
+        self.tokens = list(filter(None, re.split(r"(\s|[()])", query)))
+
+    def scan_tokens(self):
         # we are at the beginning of the next lexeme
         while not is_at_end():
             start = current
@@ -56,3 +61,4 @@ while True:
     query = input("> ")
     if balanced_parentheses(query):
         print(query)
+
