@@ -20,21 +20,14 @@ class Table:
     def insert(self, key, value):
         self.table[key] = value
 
-class Token:
-    def __init__(self, tokentype, lexeme, literal, line):
-       self.tokentype = tokentype
-       self.lexeme = lexeme
-       self.literal = literal
-       self.line = line
-
-
 source = ""
 # open source file if supplied
 if len(sys.argv) > 1 and len(sys.argv) < 3:
     f = open(sys.argv[1])
     source = f.read()
     s = scanner.Scanner(source)
-    tokens = s.split_into_lexemes()
-    print(tokens)
-    p = parser.Parser(source, tokens)
-    print(p.is_valid_lisp_syntax())
+    s.split_into_lexemes()
+    s.define_tokens()
+    print(s.tokens)
+    #p = parser.Parser(source, tokens)
+    #print(p.is_valid_lisp_syntax())
