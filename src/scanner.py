@@ -86,7 +86,7 @@ class Scanner:
                 self.tokens.append(Token(TokenType.STRING, lexeme[0], lexeme[1]))
             else:
                 print("No match")
-        self.tokens.append(Token(TokenType.EOF, "", lexemes[-1][1]))
+        self.tokens.append(Token(TokenType.EOF, "", self.lexemes[-1][1]))
 
 
     # split into lexemes

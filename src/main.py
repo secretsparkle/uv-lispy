@@ -29,5 +29,5 @@ if len(sys.argv) > 1 and len(sys.argv) < 3:
     s.split_into_lexemes()
     s.define_tokens()
     print(s.tokens)
-    #p = parser.Parser(source, tokens)
-    #print(p.is_valid_lisp_syntax())
+    p = parser.Parser(s.tokens)
+    p.is_BODY()
