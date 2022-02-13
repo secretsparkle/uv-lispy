@@ -29,5 +29,7 @@ if len(sys.argv) > 1 and len(sys.argv) < 3:
     s.split_into_lexemes()
     s.define_tokens()
     print(s.tokens)
+    for token in s.tokens:
+        print(token.token_type)
     p = parser.Parser(s.tokens)
-    p.is_BODY()
+    print(p.is_BODY())
