@@ -1,0 +1,16 @@
+
+# primitives: define, equal-p, first, if, lambda, list-p, not, null-p, rest, +, -, *, /, %, =
+
+(define atom-p (x)
+        (and (not (null-p x)) (not (list-p x))))
+
+(define even-p (number)
+        (if (= (% number 2) 0)
+            true
+            false))
+
+(define odd-p (number)
+        (if (= (% number 2) 1)
+            true
+            false))
+
