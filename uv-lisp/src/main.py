@@ -20,16 +20,23 @@ class Table:
     def insert(self, key, value):
         self.table[key] = value
 
-source = ""
-# open source file if supplied
-if len(sys.argv) > 1 and len(sys.argv) < 3:
-    f = open(sys.argv[1])
-    source = f.read()
-    s = scanner.Scanner(source)
-    s.split_into_lexemes()
-    s.define_tokens()
-    print(s.tokens)
-    for token in s.tokens:
-        print(token.token_type)
-    p = parser.Parser(s.tokens)
-    print(p.is_BODY())
+def main():
+    source = ""
+    # open source file if supplied
+    if len(sys.argv) > 1 and len(sys.argv) < 3:
+        f = open(sys.argv[1])
+        source = f.read()
+        s = scanner.Scanner(source)
+        s.split_into_lexemes()
+        if s.define_tokens() == False:
+            print("Error: No match for Token")
+            return
+
+        print(s.tokens)
+        for token in s.tokens:
+            print(token.token_type)
+            p = parser.Parser(s.tokens)
+            print(p.is_BODY())
+
+if __name__=="__main__":
+    main()

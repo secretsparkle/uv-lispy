@@ -37,6 +37,8 @@ class Scanner:
             print(lexeme[1])
             if lexeme[0] == "=":
                 self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "=", lexeme[1]))
+            elif lexeme[0] == "if":
+                self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "if", lexeme[1]))
             elif lexeme[0] == ">":
                 self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, ">", lexeme[1]))
             elif lexeme[0] == "(":
@@ -71,11 +73,13 @@ class Scanner:
                 self.tokens.append(Token(TokenType.IDENTIFIER, lexeme[0], lexeme[1]))
             elif re.match("[0-9]+", lexeme[0]):
                 self.tokens.append(Token(TokenType.NUMBER, lexeme[0], lexeme[1]))
-            elif re.match("\"*\"", lexeme[0]):
+            elif re.match("\".*\"", lexeme[0]):
                 self.tokens.append(Token(TokenType.STRING, lexeme[0], lexeme[1]))
             else:
                 print("No match")
+                return False
         self.tokens.append(Token(TokenType.EOF, "", self.lexemes[-1][1]))
+        return True
 
 
     # split into lexemes
