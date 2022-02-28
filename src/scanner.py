@@ -76,7 +76,7 @@ class Scanner:
             elif re.match("\".*\"", lexeme[0]):
                 self.tokens.append(Token(TokenType.STRING, lexeme[0], lexeme[1]))
             else:
-                print("No match")
+                print("No match for " + lexeme[0])
                 return False
         self.tokens.append(Token(TokenType.EOF, "", self.lexemes[-1][1]))
         return True

@@ -6,7 +6,7 @@ def first(lst):
         return None
 
 def rest(lst):
-    if type(lst) is list and len(lst) < 2:
+    if type(lst) is list and len(lst) >= 2:
         return lst[1:]
     else:
         return None

@@ -1,0 +1,6 @@
+(import ../library/standard)
+
+(define hello-world ()
+        (print "hello, world"))
+
+(hello-world)
