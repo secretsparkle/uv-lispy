@@ -56,7 +56,6 @@ class Translator:
                         break
                     self.output_file.write(self.replace_dash(index))
                     index += 1
-                print(self.parentheses)
                 if self.parentheses == 0:
                     self.output_file.write("\n")
 
