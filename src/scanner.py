@@ -9,6 +9,8 @@ class TokenType(Enum):
     RIGHT_PAREN = auto()
 
     # one or more characters
+    BINARY_OPERATOR = auto()
+    DEF_OPERATOR = auto()
     IDENTIFIER = auto()
     NUMBER = auto()
     STRING = auto()
@@ -33,30 +35,30 @@ class Scanner:
 
     def define_tokens(self):
         for lexeme in self.lexemes:
-            print(lexeme[0])
-            print(lexeme[1])
             if lexeme[0] == "=":
-                self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "=", lexeme[1]))
+                self.tokens.append(Token(TokenType.BINARY_OPERATOR, "==", lexeme[1]))
+            elif lexeme[0] == "if":
+                self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "if", lexeme[1]))
             elif lexeme[0] == ">":
-                self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, ">", lexeme[1]))
+                self.tokens.append(Token(TokenType.BINARY_OPERATOR, ">", lexeme[1]))
             elif lexeme[0] == "(":
                 self.tokens.append(Token(TokenType.LEFT_PAREN, "(", lexeme[1]))
             elif lexeme[0] == "<":
-                self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "<", lexeme[1]))
+                self.tokens.append(Token(TokenType.BINARY_OPERATOR, "<", lexeme[1]))
             elif lexeme[0]== "-":
-                self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "-", lexeme[1]))
+                self.tokens.append(Token(TokenType.BINARY_OPERATOR, "-", lexeme[1]))
             elif lexeme[0] == "+":
-                self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "+", lexeme[1]))
+                self.tokens.append(Token(TokenType.BINARY_OPERATOR, "+", lexeme[1]))
             elif lexeme[0] == ")":
                 self.tokens.append(Token(TokenType.RIGHT_PAREN, ")", lexeme[1]))
             elif lexeme[0] == "/":
-                self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "/", lexeme[1]))
+                self.tokens.append(Token(TokenType.BINARY_OPERATOR, "/", lexeme[1]))
             elif lexeme[0] == "*":
-                self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "*", lexeme[1]))
+                self.tokens.append(Token(TokenType.BINARY_OPERATOR, "*", lexeme[1]))
             elif lexeme[0] == "and":
-                self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "and", lexeme[1]))
+                self.tokens.append(Token(TokenType.BINARY_OPERATOR, "and", lexeme[1]))
             elif lexeme[0] == "define":
-                self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "define", lexeme[1]))
+                self.tokens.append(Token(TokenType.DEF_OPERATOR, "define", lexeme[1]))
             elif lexeme[0] == "false":
                 self.tokens.append(Token(TokenType.FALSE, "false", lexeme[1]))
             elif lexeme[0] == "nil":
@@ -64,18 +66,20 @@ class Scanner:
             elif lexeme[0] == "not":
                 self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "not", lexeme[1]))
             elif lexeme[0] == "or":
-                self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "or", lexeme[1]))
+                self.tokens.append(Token(TokenType.BINARY_OPERATOR, "or", lexeme[1]))
             elif lexeme[0] == "true":
                 self.tokens.append(Token(TokenType.TRUE, "true", lexeme[1]))
             elif re.match("^[a-zA-Z]+\-[a-zA-Z]+|^[a-zA-Z]+", lexeme[0]):
                 self.tokens.append(Token(TokenType.IDENTIFIER, lexeme[0], lexeme[1]))
             elif re.match("[0-9]+", lexeme[0]):
                 self.tokens.append(Token(TokenType.NUMBER, lexeme[0], lexeme[1]))
-            elif re.match("\"*\"", lexeme[0]):
+            elif re.match("\".*\"", lexeme[0]):
                 self.tokens.append(Token(TokenType.STRING, lexeme[0], lexeme[1]))
             else:
                 print("No match")
+                return False
         self.tokens.append(Token(TokenType.EOF, "", self.lexemes[-1][1]))
+        return True
 
 
     # split into lexemes
