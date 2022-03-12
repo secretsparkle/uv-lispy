@@ -11,6 +11,8 @@ class TokenType(Enum):
     # one or more characters
     BINARY_OPERATOR = auto()
     DEF_OPERATOR = auto()
+    IMPORT_OPERATOR = auto()
+    FROM_OPERATOR = auto()
     IDENTIFIER = auto()
     NUMBER = auto()
     STRING = auto()
@@ -59,6 +61,10 @@ class Scanner:
                 self.tokens.append(Token(TokenType.BINARY_OPERATOR, "and", lexeme[1]))
             elif lexeme[0] == "define":
                 self.tokens.append(Token(TokenType.DEF_OPERATOR, "define", lexeme[1]))
+            elif lexeme[0] == "import":
+                self.tokens.append(Token(TokenType.IMPORT_OPERATOR, "import", lexeme[1]))
+            elif lexeme[0] == "from":
+                self.tokens.append(Token(TokenType.FROM_OPERATOR, "from", lexeme[1]))
             elif lexeme[0] == "false":
                 self.tokens.append(Token(TokenType.FALSE, "false", lexeme[1]))
             elif lexeme[0] == "nil":
@@ -70,6 +76,8 @@ class Scanner:
             elif lexeme[0] == "true":
                 self.tokens.append(Token(TokenType.TRUE, "true", lexeme[1]))
             elif re.match("^[a-zA-Z]+\-[a-zA-Z]+|^[a-zA-Z]+", lexeme[0]):
+                self.tokens.append(Token(TokenType.IDENTIFIER, lexeme[0], lexeme[1]))
+            elif re.match("^(__)[a-zA-Z]*__", lexeme[0]):
                 self.tokens.append(Token(TokenType.IDENTIFIER, lexeme[0], lexeme[1]))
             elif re.match("[0-9]+", lexeme[0]):
                 self.tokens.append(Token(TokenType.NUMBER, lexeme[0], lexeme[1]))
@@ -87,7 +95,7 @@ class Scanner:
     # * by whitespace
     # * by parentheses
     def split_into_lexemes(self):
-        raw_lexemes = list(filter(None, re.split(r"(\".+\"|\s|[()])", self.source)))
+        raw_lexemes = list(filter(None, re.split(r"(\"[^\"]+\"|\s|[()])", self.source)))
         line = 0
         for lexeme in raw_lexemes:
             if lexeme == '\n':

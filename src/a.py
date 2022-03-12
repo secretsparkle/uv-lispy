@@ -1,13 +1,8 @@
-import sys, os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'library'))
-import standard
-
+import sys
+import os
 def hello_world():
 	print("hello, world")
-
 hello_world()
-
-lst = ["one", "two", "three"]
-
-print(standard.first(lst))
-print(standard.rest(lst))
+(2 + 3 + 4)
+(2 + (5 - 4) + 3)
+print((2 + 3 + 4))

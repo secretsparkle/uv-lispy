@@ -50,7 +50,16 @@ class Parser:
             return False
 
     def is_KEYWORD_IDENTIFIER(self):
-        if (self.tokens[self.current].token_type == TokenType.KEYWORD_IDENTIFIER) or (self.tokens[self.current].token_type == TokenType.DEF_OPERATOR):
+        if self.tokens[self.current].token_type == TokenType.KEYWORD_IDENTIFIER:
+            self.next_token()
+            return True
+        elif self.tokens[self.current].token_type == TokenType.DEF_OPERATOR:
+            self.next_token()
+            return True
+        elif self.tokens[self.current].token_type == TokenType.IMPORT_OPERATOR:
+            self.next_token()
+            return True
+        elif self.tokens[self.current].token_type == TokenType.FROM_OPERATOR:
             self.next_token()
             return True
         else:

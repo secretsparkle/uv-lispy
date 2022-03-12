@@ -7,6 +7,8 @@ def hello_world():
 
 hello_world()
 
+print(2 + 4 + 3)
+
 lst = ["one", "two", "three"]
 
 print(standard.first(lst))
