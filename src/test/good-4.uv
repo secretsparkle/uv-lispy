@@ -1,0 +1,9 @@
+(import sys)
+(import os)
+
+(define hello-world ()
+        (print "hello, world"))
+
+(hello-world)
+
+(+ 2 3 4)

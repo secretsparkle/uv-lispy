@@ -118,11 +118,12 @@ class Translator:
                             break
                     elif self.tokens[self.index].token_type == scanner.TokenType.LEFT_PAREN:
                         if self.tokens[self.index+1].token_type == scanner.TokenType.BINARY_OPERATOR:
+                            bin_op = True
                             self.output_file.write("(") # these will always be in parentheses
                             operator = []
                             self.index += 1
                             operator.append(self.tokens[self.index].literal)
-                            num_paren_bin_expr = 1
+                            num_paren_bin_expr = 2
                             self.index += 1
                             while True:
                                 if self.tokens[self.index].token_type == scanner.TokenType.NUMBER or self.tokens[self.index].token_type == scanner.TokenType.IDENTIFIER:
@@ -156,7 +157,8 @@ class Translator:
                                     if num_paren_bin_expr == 0:
                                         self.output_file.write("\n")
                                         break
-
+                        if bin_op:
+                            break
                         self.output_file.write(self.tokens[self.index].literal)
                         self.output_file.write(self.replace_dash(self.index+1))
                         self.output_file.write("(")
