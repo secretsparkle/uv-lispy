@@ -31,10 +31,10 @@ class Translator:
                     self.num_parentheses -= 1
                     self.index += 1
                     break
-        else:
-            self.output_file.write(", ")
-            self.output_file.write("):")
-            self.newline_and_scope_insert()
+       # else:
+       #     self.output_file.write(", ")
+       #     self.output_file.write("):")
+       #     self.newline_and_scope_insert()
 
     # IMPORT OPERATOR
     # (import ARGUMENT) => import argument
@@ -149,7 +149,7 @@ class Translator:
                                 self.output_file.write("\n")
                                 break
                     if bin_op:
-                    break
+                        break
                 self.output_file.write(self.tokens[self.index].literal)
                 self.output_file.write(self.replace_dash(self.index+1))
                 self.output_file.write("(")

@@ -13,12 +13,23 @@ class Translator:
         self.index += 1
         self.output_file.write("(")
         self.index += 2 # skip over extra tokens
+
         # if there are no arguments
-        # i.e. this defines a variable
         if self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN:
             self.output_file.write("):")
             self.newline_and_scope_insert()
-
+        # if there are arguments
+        elif self.tokens[self.index + 1].token_type == scanner.TokenType.LEFT_PAREN:
+            self.index += 2
+            while True:
+                self.output.write(self.tokens[self.index].literal)
+                self.index += 1
+                # if we're at the end of the arguments
+                if self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN:
+                    self.num_parentheses -= 1
+                    self.index += 1
+                    break
+        self.translate()
 
     def translate(self):
         # LEFT PARENTHESES
@@ -47,12 +58,15 @@ class Translator:
         # (BIN_OP ARGUMENT, ARGUMENT, ...) => (ARGUMENT, BIN_OP ARGUMENT, ...)
         elif self.tokens[self.index].token_type == scanner.TokenType.BINARY_OPERATOR:
             self.binary_operator()
-            
+
         # IDENTIFIER
         # (IDENTIFIER ARGUMENT) => IDENTIFIER(ARGUMENT)
         # (IDENTIFIER ARGUMENT ...) => IDENTIFIER(ARGUMENT, ...)
         elif self.tokens[self.index].token_type == scanner.TokenType.IDENTIFIER:
                self.identifier()
+
+        elif self.tokens[self.index].token_type == scanner.TokenType.EOF:
+            return
 
     def left_paren(self):
         self.num_parentheses += 1
