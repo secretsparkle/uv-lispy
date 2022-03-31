@@ -15,6 +15,7 @@ class TokenType(Enum):
     FROM_OPERATOR = auto()
     IDENTIFIER = auto()
     NUMBER = auto()
+    QUOTE_OPERATOR = auto()
     STRING = auto()
 
     KEYWORD_IDENTIFIER = auto()
@@ -81,6 +82,8 @@ class Scanner:
                 self.tokens.append(Token(TokenType.IDENTIFIER, lexeme[0], lexeme[1]))
             elif re.match("[0-9]+", lexeme[0]):
                 self.tokens.append(Token(TokenType.NUMBER, lexeme[0], lexeme[1]))
+            elif lexeme[0] == "\'":
+                self.tokens.append(Token(TokenType.QUOTE_OPERATOR, "'", lexeme[1]))
             elif re.match("\".*\"", lexeme[0]):
                 self.tokens.append(Token(TokenType.STRING, lexeme[0], lexeme[1]))
             else:
