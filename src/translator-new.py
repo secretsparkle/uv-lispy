@@ -31,6 +31,20 @@ class Translator:
                     break
         self.translate()
 
+    def import_operator(self):
+        self.index += 1
+        while True:
+            self.output_file.write(" ")
+            self.output_file.write(self.tokens[self.index].literal)
+            self.index += 1
+            if self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN:
+                self.num_parentheses -= 1
+                self.index += 1
+                break
+            else:
+                self.output_file.write(", ")
+        self.output_file.write("\n")
+
     def translate(self):
         # LEFT PARENTHESES
         if self.tokens[self.index].token_type == scanner.TokenType.LEFT_PAREN:
