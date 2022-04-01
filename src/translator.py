@@ -81,12 +81,13 @@ class Translator:
 
 
     def identifier(self):
+        print("identifier")
         self.output_file.write(self.replace_dash(self.index))
         self.output_file.write("(")
         self.num_parentheses += 1
         self.index += 1
         while True:
-            if self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN and self.num_parentheses <= 1:
+            if self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN and self.num_parentheses == 1:
                 self.num_parentheses -= 1
                 self.index += 1
                 break
@@ -117,13 +118,16 @@ class Translator:
         self.translate()
 
     def translate(self):
+        print("translate")
         # LEFT PARENTHESES
         if self.tokens[self.index].token_type == scanner.TokenType.LEFT_PAREN:
-            self.left_paren()
+            self.num_parentheses += 1
+            self.index += 1
 
         # RIGHT PARENTHESES
         elif self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN:
-            self.right_paren()
+            self.num_parentheses -= 1
+            self.index += 1
 
         # DEFINE OPERATOR
         # (define IDENTIFIER ()) => def IDENTIFIER():
@@ -151,10 +155,6 @@ class Translator:
         elif self.tokens[self.index].token_type == scanner.TokenType.EOF:
             return
 
-    def left_paren(self):
-        self.num_parentheses += 1
-        self.index += 1
-
     def newline_check(self, index):
         if self.tokens[index].line - self.tokens[index-1].line == 1:
             return True
@@ -164,6 +164,3 @@ class Translator:
     def replace_dash(self, index):
         return self.tokens[index].literal.replace("-", "_")
 
-    def right_paren(self):
-        self.num_parentheses -= 1
-        self.index += 1

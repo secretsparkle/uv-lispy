@@ -10,6 +10,7 @@ class TokenType(Enum):
 
     # one or more characters
     BINARY_OPERATOR = auto()
+    BIND_OPERATOR = auto()
     DEF_OPERATOR = auto()
     IMPORT_OPERATOR = auto()
     FROM_OPERATOR = auto()
