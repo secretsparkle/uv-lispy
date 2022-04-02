@@ -9,6 +9,8 @@ class Translator:
         self.output_file = open(self.python_file, "w")
 
     def def_operator(self):
+        print("def operator")
+        print(self.num_parentheses)
         self.output_file.write("def ")
         self.index += 1
         self.output_file.write(self.replace_dash(self.index))
@@ -34,6 +36,7 @@ class Translator:
         self.translate()
 
     def import_operator(self):
+        print("import_operator")
         self.index += 1
         while True:
             self.output_file.write(" ")
@@ -48,6 +51,7 @@ class Translator:
         self.output_file.write("\n")
 
     def binary_operator(self):
+        print("binary operator")
         operator = []
         operator.append(self.tokens[self.index].literal)
         self.output_file.write("(")
@@ -84,17 +88,26 @@ class Translator:
         print("identifier")
         self.output_file.write(self.replace_dash(self.index))
         self.output_file.write("(")
-        self.num_parentheses += 1
         self.index += 1
         while True:
-            if self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN and self.num_parentheses == 1:
+            print("while identifier")
+            print(self.num_parentheses)
+            if self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN and self.num_parentheses <= 1:
+                print("exiting identifier")
+                self.output_file.write(")")
                 self.num_parentheses -= 1
                 self.index += 1
+                self.output_file.write("\n")
                 break
             elif self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN:
-                self.output_file.write(")")
-                self.index += 1
-                self.num_parentheses -= 1
+                # let's see how this flys in the future
+                if self.num_parentheses == 2:
+                    self.index += 1
+                    self.num_parentheses -= 1
+                else:
+                    self.output_file.write(")")
+                    self.index += 1
+                    self.num_parentheses -= 1
             else:
                 self.output_file.write(self.replace_dash(self.index))
                 self.index += 1
@@ -119,13 +132,18 @@ class Translator:
 
     def translate(self):
         print("translate")
+        print(self.num_parentheses)
+        print(self.tokens[self.index].literal)
         # LEFT PARENTHESES
         if self.tokens[self.index].token_type == scanner.TokenType.LEFT_PAREN:
+            print("left paren")
             self.num_parentheses += 1
             self.index += 1
+            print(self.num_parentheses)
 
         # RIGHT PARENTHESES
         elif self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN:
+            print("right paren")
             self.num_parentheses -= 1
             self.index += 1
 
@@ -150,7 +168,7 @@ class Translator:
         # (IDENTIFIER ARGUMENT) => IDENTIFIER(ARGUMENT)
         # (IDENTIFIER ARGUMENT ...) => IDENTIFIER(ARGUMENT, ...)
         elif self.tokens[self.index].token_type == scanner.TokenType.IDENTIFIER:
-               self.identifier()
+            self.identifier()
 
         elif self.tokens[self.index].token_type == scanner.TokenType.EOF:
             return
