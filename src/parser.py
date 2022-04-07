@@ -53,13 +53,16 @@ class Parser:
         if self.tokens[self.current].token_type == TokenType.KEYWORD_IDENTIFIER:
             self.next_token()
             return True
-        elif self.tokens[self.current].token_type == TokenType.DEF_OPERATOR:
+        elif self.tokens[self.current].token_type == TokenType.DEFINE_OPERATOR:
             self.next_token()
             return True
         elif self.tokens[self.current].token_type == TokenType.IMPORT_OPERATOR:
             self.next_token()
             return True
         elif self.tokens[self.current].token_type == TokenType.FROM_OPERATOR:
+            self.next_token()
+            return True
+        elif self.tokens[self.current].token_type == TokenType.LAMBDA_OPERATOR:
             self.next_token()
             return True
         else:

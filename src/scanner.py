@@ -10,11 +10,11 @@ class TokenType(Enum):
 
     # one or more characters
     BINARY_OPERATOR = auto()
-    BIND_OPERATOR = auto()
-    DEF_OPERATOR = auto()
+    DEFINE_OPERATOR = auto()
     IMPORT_OPERATOR = auto()
     FROM_OPERATOR = auto()
     IDENTIFIER = auto()
+    LAMBDA_OPERATOR = auto()
     NUMBER = auto()
     QUOTE_OPERATOR = auto()
     STRING = auto()
@@ -62,13 +62,15 @@ class Scanner:
             elif lexeme[0] == "and":
                 self.tokens.append(Token(TokenType.BINARY_OPERATOR, "and", lexeme[1]))
             elif lexeme[0] == "define":
-                self.tokens.append(Token(TokenType.DEF_OPERATOR, "define", lexeme[1]))
+                self.tokens.append(Token(TokenType.DEFINE_OPERATOR, "define", lexeme[1]))
             elif lexeme[0] == "import":
                 self.tokens.append(Token(TokenType.IMPORT_OPERATOR, "import", lexeme[1]))
             elif lexeme[0] == "from":
                 self.tokens.append(Token(TokenType.FROM_OPERATOR, "from", lexeme[1]))
             elif lexeme[0] == "false":
                 self.tokens.append(Token(TokenType.FALSE, "false", lexeme[1]))
+            elif lexeme[0] == "lambda":
+                self.tokens.append(Token(TokenType.LAMBDA_OPERATOR, "lambda", lexeme[1]))
             elif lexeme[0] == "nil":
                 self.tokens.append(Token(TokenType.NIL, "nil", lexeme[1]))
             elif lexeme[0] == "not":

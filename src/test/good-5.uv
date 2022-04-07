@@ -1,8 +1,8 @@
 (import sys)
 (import os)
 
-(define hello-world ()
-        (print "hello, world"))
+(define hello-world
+        (lambda () (print "hello, world"))
 
 (hello-world)
 
