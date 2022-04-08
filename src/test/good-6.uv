@@ -1,6 +1,6 @@
-(import library.standard)
+(from library import standard as s)
 
 (define lst '("one" "two" "three"))
 
-(print (standard.first lst))
-(print (standard.rest lst))
+(print (s.first lst))
+(print (s.rest lst))

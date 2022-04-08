@@ -9,6 +9,7 @@ class TokenType(Enum):
     RIGHT_PAREN = auto()
 
     # one or more characters
+    AS_OPERATOR = auto()
     BINARY_OPERATOR = auto()
     DEFINE_OPERATOR = auto()
     IMPORT_OPERATOR = auto()
@@ -61,6 +62,8 @@ class Scanner:
                 self.tokens.append(Token(TokenType.BINARY_OPERATOR, "*", lexeme[1]))
             elif lexeme[0] == "and":
                 self.tokens.append(Token(TokenType.BINARY_OPERATOR, "and", lexeme[1]))
+            elif lexeme[0] == "as":
+                self.tokens.append(Token(TokenType.AS_OPERATOR, "as", lexeme[1]))
             elif lexeme[0] == "define":
                 self.tokens.append(Token(TokenType.DEFINE_OPERATOR, "define", lexeme[1]))
             elif lexeme[0] == "import":

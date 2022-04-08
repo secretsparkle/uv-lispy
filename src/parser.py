@@ -53,6 +53,8 @@ class Parser:
         if self.tokens[self.current].token_type == TokenType.KEYWORD_IDENTIFIER:
             self.next_token()
             return True
+        elif self.tokens[self.current].token_type == TokenType.AS_OPERATOR:
+            self.next_token()
         elif self.tokens[self.current].token_type == TokenType.DEFINE_OPERATOR:
             self.next_token()
             return True
