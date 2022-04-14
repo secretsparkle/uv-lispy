@@ -5,17 +5,13 @@ class Translator:
         self.index = 0
         self.python_file = python_file # default is a.py
         self.tokens = tokens
-        self.output_file = open(self.python_file, "w")
+        self.output_file = open(self.python_file, "a")
 
     def define_operator(self, from_function):
-        print("define operator")
-        #self.output_file.write("def ")
         self.index += 1
         self.output_file.write(self.replace_dash(self.index))
         self.output_file.write(" = ")
         self.index += 1
-        #self.output_file.write("(")
-        #self.index += 2
 
         # lambda, number, identifier, list
         # lambda
@@ -25,26 +21,22 @@ class Translator:
                 self.lambda_operator("define_operator")
 
         self.translate("define")
-        # if there are no arguments
-        #if self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN:
-            #self.output_file.write(" = ")
-            #self.output_file.write("):")
-            #self.output_file.write("\n\t")
-            #self.index += 1
-        # if there are arguments
-        #elif self.tokens[self.index + 1].token_type == scanner.TokenType.LEFT_PAREN:
-            #self.index += 2
-            #while True:
-                #self.output.write(self.tokens[self.index].literal)
-                #self.index += 1
-                # if we're at the end of the arguments
-                #if self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN:
-                #    self.num_parentheses -= 1
-                #E    self.index += 1
-                #    break
+
+    def if_expression(self, from_function):
+        self.output_file.write("if ")
+        self.index += 1
+        # predicate
+        # two possiblities, list or single value
+        # identifier value
+        if self.tokens[self.index].token_type == scanner.TokenType.LEFT_PAREN:
+            self.index += 1
+            self.binary_operator("if")
+        # single value
+        else:
+            self.output_file.write(self.tokens[self.index].literal)
+        self.translate("if")
 
     def importing_operator(self, from_function):
-        print("import_operator")
         while True:
             self.output_file.write(self.tokens[self.index].literal)
             self.index += 1
@@ -62,10 +54,8 @@ class Translator:
         self.translate("import")
 
     def binary_operator(self, from_function):
-        print("binary operator")
         operator = []
         operator.append(self.tokens[self.index].literal)
-        #self.output_file.write("(")
         self.index += 1
         while True:
             if self.tokens[self.index].token_type == scanner.TokenType.NUMBER or self.tokens[self.index].token_type == scanner.TokenType.IDENTIFIER:
@@ -73,7 +63,12 @@ class Translator:
                 self.index += 1
                 if self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN and (self.tokens[self.index+1].token_type == scanner.TokenType.LEFT_PAREN or self.tokens[self.index+1].token_type == scanner.TokenType.EOF):
                     self.index += 1
-                    self.output_file.write("\n")
+                    if from_function == "if":
+                        self.output_file.write(":")
+                        self.output_file.write("\n    ")
+                        return
+                    else:
+                        self.output_file.write("\n")
                     break
                 elif self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN:
                     self.output_file.write(")")
@@ -98,14 +93,11 @@ class Translator:
 
 
     def identifier(self, from_function):
-        print("identifier")
         self.output_file.write(self.replace_dash(self.index))
         self.output_file.write("(")
         self.index += 1
         while True:
-            print("while identifier")
             if self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN and (self.tokens[self.index+1].token_type == scanner.TokenType.LEFT_PAREN or self.tokens[self.index+1].token_type == scanner.TokenType.EOF):
-                print("exiting identifier")
                 self.output_file.write(")")
                 self.index += 1
                 self.output_file.write("\n")
@@ -117,12 +109,13 @@ class Translator:
                 self.index += 1
                 if from_function != "lambda":
                     self.output_file.write(")")
-
             elif self.tokens[self.index].token_type == scanner.TokenType.BINARY_OPERATOR:
                 self.binary_operator("identifier")
 
             elif self.tokens[self.index].token_type == scanner.TokenType.LEFT_PAREN:
                 self.index += 1
+                if from_function == "if":
+                    self.output_file.write("\n    ")
                 self.translate("identifier")
             else:
                 self.output_file.write(self.replace_dash(self.index))
@@ -133,7 +126,6 @@ class Translator:
         self.translate("identifier")
 
     def lambda_operator(self, from_function=""):
-        print("lambda")
         self.output_file.write("lambda ")
         self.index += 2 # skip left paren
         # there are no arguments to the function
@@ -144,10 +136,11 @@ class Translator:
             while True:
                 if self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN:
                     self.index += 1
+                    self.output_file.write(" : ")
                     break
-                self.output.write(self.tokens[self.index].literal)
+                self.output_file.write(self.tokens[self.index].literal)
                 self.index += 1
-                        # if we're at the end of the arguments
+        # if we're at the end of the arguments
         if self.tokens[self.index].token_type == scanner.TokenType.LEFT_PAREN:
             self.index += 1
         if self.tokens[self.index].token_type == scanner.TokenType.IDENTIFIER:
@@ -176,42 +169,46 @@ class Translator:
         self.translate("quote")
 
     def translate(self, from_function=""):
-        print("translate")
-        print(self.tokens[self.index].literal)
         # LEFT PARENTHESES
         if self.tokens[self.index].token_type == scanner.TokenType.LEFT_PAREN:
-            print("left paren")
             self.index += 1
 
         # RIGHT PARENTHESES
         elif self.tokens[self.index].token_type == scanner.TokenType.RIGHT_PAREN:
-            print("right paren")
             self.index += 1
 
         # DEFINE OPERATOR
         # (define IDENTIFIER ()) => def IDENTIFIER():
         # (define IDENTFIER (ARGUMENT, ...)) => def IDENTIFIER(ARGUMENT, ...):
-        # TODO: (define IDENTIFIER VALUE(S) => IDENTIFIER = VALUE(S))
         if self.tokens[self.index].token_type == scanner.TokenType.DEFINE_OPERATOR:
+            print("define")
             self.define_operator("translate")
+
+        elif self.tokens[self.index].token_type == scanner.TokenType.IF_EXPRESSION:
+            print("if")
+            self.if_expression("translate")
 
         # IMPORT OPERATOR
         # (import ARGUMENT) => import argument
         # (import ARGUMENT, ...) => import argument, ...
         elif self.tokens[self.index].token_type == scanner.TokenType.IMPORT_OPERATOR or self.tokens[self.index].token_type == scanner.TokenType.FROM_OPERATOR or self.tokens[self.index].token_type == scanner.TokenType.AS_OPERATOR:
+            print("import")
             self.importing_operator("translate")
         # BINARY OPERATOR
         # (BIN_OP ARGUMENT, ARGUMENT, ...) => (ARGUMENT, BIN_OP ARGUMENT, ...)
         elif self.tokens[self.index].token_type == scanner.TokenType.BINARY_OPERATOR:
+            print("binary operator")
             self.binary_operator("translate")
 
         # IDENTIFIER
         # (IDENTIFIER ARGUMENT) => IDENTIFIER(ARGUMENT)
         # (IDENTIFIER ARGUMENT ...) => IDENTIFIER(ARGUMENT, ...)
         elif self.tokens[self.index].token_type == scanner.TokenType.IDENTIFIER:
-            self.identifier("translate")
+            print("identifier")
+            self.identifier(from_function)
 
         elif self.tokens[self.index].token_type == scanner.TokenType.QUOTE_OPERATOR:
+            print("quote")
             self.quote_operator("translate")
 
         elif self.tokens[self.index].token_type == scanner.TokenType.EOF:

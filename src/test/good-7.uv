@@ -1,15 +1,4 @@
-(import sys)
-(import os)
-(import library.standard)
-
-(define hello-world ()
-        (print "hello, world"))
-
-(hello-world)
-
-(print (+ 2 4))
-
 (define lst '("one" "two" "three"))
 
-(print (standard.first lst))
-(print (standard.rest lst))
+(print (first lst))
+(print (rest lst))

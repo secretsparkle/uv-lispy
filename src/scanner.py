@@ -12,6 +12,7 @@ class TokenType(Enum):
     AS_OPERATOR = auto()
     BINARY_OPERATOR = auto()
     DEFINE_OPERATOR = auto()
+    IF_EXPRESSION = auto()
     IMPORT_OPERATOR = auto()
     FROM_OPERATOR = auto()
     IDENTIFIER = auto()
@@ -42,8 +43,6 @@ class Scanner:
         for lexeme in self.lexemes:
             if lexeme[0] == "=":
                 self.tokens.append(Token(TokenType.BINARY_OPERATOR, "==", lexeme[1]))
-            elif lexeme[0] == "if":
-                self.tokens.append(Token(TokenType.KEYWORD_IDENTIFIER, "if", lexeme[1]))
             elif lexeme[0] == ">":
                 self.tokens.append(Token(TokenType.BINARY_OPERATOR, ">", lexeme[1]))
             elif lexeme[0] == "(":
@@ -66,6 +65,8 @@ class Scanner:
                 self.tokens.append(Token(TokenType.AS_OPERATOR, "as", lexeme[1]))
             elif lexeme[0] == "define":
                 self.tokens.append(Token(TokenType.DEFINE_OPERATOR, "define", lexeme[1]))
+            elif lexeme[0] == "if":
+                self.tokens.append(Token(TokenType.IF_EXPRESSION, "if", lexeme[1]))
             elif lexeme[0] == "import":
                 self.tokens.append(Token(TokenType.IMPORT_OPERATOR, "import", lexeme[1]))
             elif lexeme[0] == "from":

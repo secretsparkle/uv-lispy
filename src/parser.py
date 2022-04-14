@@ -58,6 +58,9 @@ class Parser:
         elif self.tokens[self.current].token_type == TokenType.DEFINE_OPERATOR:
             self.next_token()
             return True
+        elif self.tokens[self.current].token_type == TokenType.IF_EXPRESSION:
+            self.next_token()
+            return True
         elif self.tokens[self.current].token_type == TokenType.IMPORT_OPERATOR:
             self.next_token()
             return True
